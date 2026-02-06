@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Matematika</title>
+
+<style>
+body{font-family:Arial;margin:0;background:#f2f2f2}
+#awal{padding:20px}
+#kuis{display:none;height:100vh}
+#navSoal{
+  width:70px;
+  background:#fff;
+  border-right:2px solid #ddd;
+  padding:5px;
+  overflow-y:auto
+}
+#navSoal button{
+  width:45px;
+  margin:4px;
+  padding:8px;
+  font-size:16px
+}
+.dijawab{background:#4CAF50;color:#fff}
+#konten{flex:1;padding:15px}
+#timer{color:red;font-size:22px;font-weight:bold}
+button{font-size:18px;padding:12px;margin-top:10px;width:100%}
+#halamanHasil{display:none;padding:20px}
+</style>
+</head>
+
+<body>
+
+<div id="awal">
+<h2>Latihan TKA Matematika 1</h2>
+
+Nama:<br>
+<input id="nama" style="width:100%;font-size:18px"><br><br>
+
+Kelas:<br>
+<input id="kelas" style="width:100%;font-size:18px"><br><br>
+
+Absen:<br>
+<input id="absen" style="width:100%;font-size:18px"><br><br>
+
+<button onclick="mulai()">Mulai Latihan</button>
+</div>
+
+<div id="kuis" style="display:flex">
+<div id="navSoal"></div>
+
+<div id="konten">
+<p>Waktu: <span id="timer"></span></p>
+<div id="kotakSoal"></div>
+
+<button onclick="nextSoal()">Simpan & Next</button>
+<button onclick="selesaiKuis()">Kirim Jawaban</button>
+</div>
+</div>
+
+<div id="halamanHasil"></div>
+
+<script>
+const URL="https://script.google.com/macros/s/AKfycbxlIx1xXK8zIdhcYJ_K7aCs8HRv7tdU3__r1a2nvpVpDSYmu9ZAy2QSstdhs47FlShdcQ/exec";
+
+let soal=[
+{t:"Promo beli 3 buku Rp12.000 diskon 25%. Bayar?",p:["27000","30000","33000","36000"],j:0},
+{t:"Suhu -4 naik 9 turun 6 = ?",p:["-1","-3","-5","-7"],j:3},
+{t:"Perbandingan 5:7 total 36. Perempuan?",p:["14","18","21","24"],j:2},
+{t:"Lampu 10 & 15 detik nyala bersama?",p:["20","25","30","45"],j:2},
+{t:"Tangki 4/5 dipakai 1/2 kapasitas. Sisa?",p:["1/10","3/10","2/5","1/2"],j:1},
+{t:"Modal 20kg x 12rb, untung 80rb. Jual/kg?",p:["14000","15000","16000","18000"],j:1},
+{t:"2³ x 3² =",p:["36","48","72","96"],j:2},
+{t:"√196 dibagi 7 =",p:["2","4","7","14"],j:2},
+{t:"x×0.4=32",p:["64","72","80","96"],j:2},
+{t:"Terbesar: 3/4,0.7,5/8,0.65",p:["3/4","0.7","5/8","0.65"],j:0}
+];
+
+let index=0,skor=0,jawaban=[],waktu=900,intervalTimer;
+
+function mulai(){
+if(!nama.value||!kelas.value||!absen.value){
+alert("Isi nama, kelas, dan absen!");
+return;
+}
+awal.style.display="none";
+kuis.style.display="flex";
+buatNav();
+tampilSoal();
+timerStart();
+}
+
+function buatNav(){
+let h="";
+for(let i=0;i<soal.length;i++){
+h+=`<button id="b${i}" onclick="lompat(${i})">${i+1}</button>`;
+}
+navSoal.innerHTML=h;
+}
+
+function tampilSoal(){
+let s=soal[index];
+let h=`<b>Soal ${index+1}</b><br><br>${s.t}<br><br>`;
+for(let i=0;i<s.p.length;i++){
+let c=(jawaban[index]==i)?"checked":"";
+h+=`<label style="display:block;margin:8px 0;font-size:18px">
+<input type="radio" name="j" value="${i}" ${c}> ${s.p[i]}
+</label>`;
+}
+kotakSoal.innerHTML=h;
+}
+
+function nextSoal(){
+let p=document.querySelector('input[name="j"]:checked');
+if(!p){alert("Pilih dulu");return;}
+
+jawaban[index]=Number(p.value);
+document.getElementById("b"+index).classList.add("dijawab");
+
+if(jawaban[index]==soal[index].j)skor++;
+
+index++;
+if(index<soal.length)tampilSoal();
+}
+
+function lompat(n){
+index=n;
+tampilSoal();
+}
+
+function timerStart(){
+timer.innerText=format(waktu);
+intervalTimer=setInterval(()=>{
+waktu--;
+timer.innerText=format(waktu);
+if(waktu<=0){
+alert("Waktu habis");
+selesaiKuis();
+}
+},1000);
+}
+
+function format(d){
+let m=Math.floor(d/60);
+let s=d%60;
+return m+":"+(s<10?"0"+s:s);
+}
+
+function selesaiKuis(){
+let yakin=confirm("Kirim jawaban?");
+if(!yakin)return;
+
+clearInterval(intervalTimer);
+
+kuis.style.display="none";
+halamanHasil.style.display="block";
+
+let nilai=skor;
+
+halamanHasil.innerHTML=`
+<h2>Hasil Latihan</h2>
+Nama: ${nama.value}<br>
+Kelas: ${kelas.value}<br>
+Absen: ${absen.value}<br><br>
+<h3>Skor: ${nilai}/${soal.length}</h3>
+<button onclick="review()">Lihat Pembahasan</button>
+<button onclick="ulang()">Latihan Lagi</button>
+`;
+
+fetch(URL,{
+method:"POST",
+body:JSON.stringify({
+nama:nama.value,
+kelas:kelas.value,
+absen:absen.value,
+skor:nilai
+})
+});
+}
+
+function review(){
+let h="<h3>Pembahasan</h3>";
+for(let i=0;i<soal.length;i++){
+h+=`<hr>${soal[i].t}<br>
+Jawabanmu: ${soal[i].p[jawaban[i]]}<br>
+Benar: ${soal[i].p[soal[i].j]}<br>`;
+}
+halamanHasil.innerHTML+=h;
+}
+
+function ulang(){
+location.reload();
+}
+</script>
+
+</body>
+</html>

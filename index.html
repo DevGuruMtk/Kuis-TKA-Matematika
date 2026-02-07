@@ -137,6 +137,35 @@ button:hover{
   transform:scale(1.3);
 }
 
+.opsi{
+  display:flex;
+  align-items:center;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  margin-bottom:12px;
+  cursor:pointer;
+  background:white;
+  font-size:18px;
+}
+
+.opsi:hover{
+  background:#f3f4f6;
+}
+
+.opsi input{
+  margin-right:12px;
+  transform:scale(1.2);
+}
+
+.huruf{
+  font-weight:bold;
+  width:30px;
+}
+
+.teks{
+  flex:1;
+}
 
 </style>
 </head>
@@ -232,8 +261,10 @@ h+=`<button id="b${i}" onclick="lompat(${i})">${i+1}</button>`;
 }
 navSoal.innerHTML=h;
 }
-function tampilSoal(){
+
+  function tampilSoal(){
 let s = soal[index];
+let huruf = ["A","B","C","D","E"];
 
 let h = `
 <div class="boxSoal">
@@ -247,7 +278,8 @@ let c = (jawaban[index]==i)?"checked":"";
 h += `
 <label class="opsi">
 <input type="radio" name="j" value="${i}" ${c}>
-<span>${s.p[i]}</span>
+<span class="huruf">${huruf[i]}.</span>
+<span class="teks">${s.p[i]}</span>
 </label>
 `;
 }
@@ -353,6 +385,7 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 
 

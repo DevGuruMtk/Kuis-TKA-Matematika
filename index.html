@@ -280,8 +280,6 @@ if(!p){alert("Pilih dulu");return;}
 jawaban[index]=Number(p.value);
 document.getElementById("b"+index).classList.add("dijawab");
 
-if(jawaban[index]==soal[index].j)skor++;
-
 index++;
 if(index<soal.length)tampilSoal();
 }
@@ -323,7 +321,11 @@ let namaVal = document.getElementById("nama").value;
 let kelasVal = document.getElementById("kelas").value;
 let absenVal = document.getElementById("absen").value;
 
-let nilai = skor;
+/* hitung skor */
+let nilai = 0;
+for(let i=0;i<soal.length;i++){
+if(jawaban[i]==soal[i].j) nilai++;
+}
 
 document.getElementById("halamanHasil").innerHTML = `
 <h2>Hasil</h2>
@@ -373,6 +375,7 @@ document.getElementById("halamanHasil").innerHTML += h;
 
 </body>
 </html>
+
 
 
 

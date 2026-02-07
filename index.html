@@ -208,7 +208,7 @@ let soal=[
 let index=0;
 let skor=0;
 let jawaban=[];
-let waktu=100;
+let waktu=600;
 let intervalTimer;
 
 function mulai(){
@@ -243,20 +243,17 @@ navSoal.innerHTML=h;
 
 function tampilSoal(){
 let s = soal[index];
-let huruf = ["A","B","C","D","E"];
+let huruf = ["A","B","C","D"];
 
-let h = `
-<div class="boxSoal">
+let h = `<div class="boxSoal">
 <b>Soal ${index+1}</b><br><br>
-${s.t}<br><br>
-`;
+${s.t}<br><br>`;
 
 for(let i=0;i<s.p.length;i++){
-let aktif = (jawaban[index]==i)?"aktif":"";
 let c = (jawaban[index]==i)?"checked":"";
 
 h += `
-<label class="opsi ${aktif}">
+<label class="opsi">
 <input type="radio" name="j" value="${i}" ${c}>
 <span class="huruf">${huruf[i]}.</span>
 <span class="teks">${s.p[i]}</span>
@@ -266,14 +263,6 @@ h += `
 
 h += `</div>`;
 kotakSoal.innerHTML = h;
-
-/* warna aktif */
-document.querySelectorAll('input[name="j"]').forEach(r=>{
-r.addEventListener("change",()=>{
-document.querySelectorAll(".opsi").forEach(o=>o.classList.remove("aktif"));
-r.parentElement.classList.add("aktif");
-});
-});
 }
 
 function nextSoal(){
@@ -316,22 +305,18 @@ return m+":"+(s<10?"0"+s:s);
 
 function selesaiKuis(){
 
-if(!confirm("Kirim jawaban?")) return;
-
 clearInterval(intervalTimer);
 
-document.getElementById("kuis").style.display = "none";
-document.getElementById("halamanHasil").style.display = "block";
+document.getElementById("kuis").style.display="none";
+document.getElementById("halamanHasil").style.display="block";
 
-let nilai = skor;
-
-// ambil data input dengan aman
 let sekolahVal = document.getElementById("sekolah").value;
 let namaVal = document.getElementById("nama").value;
 let kelasVal = document.getElementById("kelas").value;
 let absenVal = document.getElementById("absen").value;
 
-// tampilkan hasil di layar
+let nilai = skor;
+
 document.getElementById("halamanHasil").innerHTML = `
 <h2>Hasil</h2>
 Sekolah: ${sekolahVal}<br>
@@ -345,7 +330,6 @@ Absen: ${absenVal}<br><br>
 <button onclick="location.reload()">Kerjakan Lagi</button>
 `;
 
-// kirim ke Google Sheet
 fetch(URL,{
 method:"POST",
 body:JSON.stringify({
@@ -356,7 +340,6 @@ absen: absenVal,
 skor: nilai
 })
 });
-
 }
 
 function lihatPembahasan(){
@@ -364,27 +347,25 @@ function lihatPembahasan(){
 let h="<h3>Pembahasan</h3>";
 
 for(let i=0;i<soal.length;i++){
-
-let jawabanSiswa = jawaban[i] !== undefined ? soal[i].p[jawaban[i]] : "Tidak dijawab";
-let jawabanBenar = soal[i].p[soal[i].j];
+let jw = jawaban[i]!==undefined?soal[i].p[jawaban[i]]:"Tidak dijawab";
+let benar = soal[i].p[soal[i].j];
 
 h+=`
 <hr>
 <b>Soal ${i+1}</b><br>
-${soal[i].t}<br><br>
-
-Jawaban kamu: <b>${jawabanSiswa}</b><br>
-Jawaban benar: <b style="color:green">${jawabanBenar}</b><br>
+${soal[i].t}<br>
+Jawaban kamu: ${jw}<br>
+Jawaban benar: <b style="color:green">${benar}</b>
 `;
 }
 
 document.getElementById("halamanHasil").innerHTML += h;
 }
-
 </script>
 
 </body>
 </html>
+
 
 
 

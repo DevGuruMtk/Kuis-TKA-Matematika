@@ -333,18 +333,17 @@ Absen: ${absen.value}<br><br>
 `;
 
 fetch(URL,{
-method:"POST",
-body:JSON.stringify({
-sekolah:sekolah.value,
-nama:nama.value,
-kelas:kelas.value,
-absen:absen.value,
-skor:nilai,
-tanggal:tanggal
-})
+  method:"POST",
+  body:JSON.stringify({
+    sekolah: sekolah.value,
+    nama: nama.value,
+    kelas: kelas.value,
+    absen: absen.value,
+    skor: nilai
+  })
 });
-}
-function lihatPembahasan(){
+
+  function lihatPembahasan(){
 
 let h="<h3>Pembahasan</h3>";
 
@@ -370,6 +369,7 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 
 

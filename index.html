@@ -115,31 +115,37 @@ button:hover{
   border-radius:12px;
   box-shadow:0 2px 6px rgba(0,0,0,0.1);
   max-width:600px;
-}.opsi{
+}
+  .opsi{
   display:flex;
   align-items:center;
-  justify-content:flex-start; /* ini penting */
-  padding:14px;
-  border:2px solid #ddd;
+  gap:12px;
+  padding:16px;
+  border:2px solid #e5e7eb;
   border-radius:12px;
   margin-bottom:12px;
   cursor:pointer;
-  background:white;
+  background:#fff;
   font-size:18px;
+  transition:0.2s;
+}
+
+.opsi:hover{
+  border-color:#2563eb;
+  background:#f8fbff;
 }
 
 .opsi input{
-  margin-right:12px;
   transform:scale(1.3);
 }
 
 .huruf{
   font-weight:bold;
-  margin-right:10px;
   width:30px;
 }
 
 .teks{
+  flex:1;
   text-align:left;
 }
 
@@ -245,9 +251,11 @@ function tampilSoal(){
 let s = soal[index];
 let huruf = ["A","B","C","D"];
 
-let h = `<div class="boxSoal">
+let h = `
+<div class="boxSoal">
 <b>Soal ${index+1}</b><br><br>
-${s.t}<br><br>`;
+${s.t}<br><br>
+`;
 
 for(let i=0;i<s.p.length;i++){
 let c = (jawaban[index]==i)?"checked":"";
@@ -365,6 +373,7 @@ document.getElementById("halamanHasil").innerHTML += h;
 
 </body>
 </html>
+
 
 
 

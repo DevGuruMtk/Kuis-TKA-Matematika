@@ -174,16 +174,19 @@ Absen: ${absen.value}<br><br>
 <button onclick="ulang()">Latihan Lagi</button>
 `;
 
+  let tgl=new Date();
+let tanggal=tgl.getDate()+"-"+(tgl.getMonth()+1)+"-"+tgl.getFullYear();
+
 fetch(URL,{
 method:"POST",
 body:JSON.stringify({
 nama:nama.value,
 kelas:kelas.value,
 absen:absen.value,
-skor:nilai
+skor:nilai,
+tanggal:tanggal
 })
 });
-}
 
 function review(){
 let h="<h3>Pembahasan</h3>";
@@ -209,5 +212,6 @@ document.getElementById("tanggal").innerHTML=
 
 </body>
 </html>
+
 
 

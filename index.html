@@ -295,11 +295,16 @@ tampilSoal();
 }
 
 function timerStart(){
-timer.innerText=format(waktu);
-intervalTimer=setInterval(()=>{
+let timerEl = document.getElementById("timer");
+timerEl.innerText = format(waktu);
+
+intervalTimer = setInterval(()=>{
 waktu--;
-timer.innerText=format(waktu);
-if(waktu<=0){selesaiKuis();}
+timerEl.innerText = format(waktu);
+
+if(waktu<=0){
+selesaiKuis();
+}
 },1000);
 }
 
@@ -310,24 +315,29 @@ return m+":"+(s<10?"0"+s:s);
 }
 
 function selesaiKuis(){
-if(!confirm("Kirim jawaban?"))return;
+
+if(!confirm("Kirim jawaban?")) return;
 
 clearInterval(intervalTimer);
 
-document.getElementById("kuis").style.display="none";
-document.getElementById("halamanHasil").style.display="block";
+document.getElementById("kuis").style.display = "none";
+document.getElementById("halamanHasil").style.display = "block";
 
-let nilai=skor;
+let nilai = skor;
 
-let tgl=new Date();
-let tanggal=tgl.getDate()+"-"+(tgl.getMonth()+1)+"-"+tgl.getFullYear();
+// ambil data input dengan aman
+let sekolahVal = document.getElementById("sekolah").value;
+let namaVal = document.getElementById("nama").value;
+let kelasVal = document.getElementById("kelas").value;
+let absenVal = document.getElementById("absen").value;
 
-  halamanHasil.innerHTML=`
+// tampilkan hasil di layar
+document.getElementById("halamanHasil").innerHTML = `
 <h2>Hasil</h2>
-Sekolah: ${sekolah.value}<br>
-Nama: ${nama.value}<br>
-Kelas: ${kelas.value}<br>
-Absen: ${absen.value}<br><br>
+Sekolah: ${sekolahVal}<br>
+Nama: ${namaVal}<br>
+Kelas: ${kelasVal}<br>
+Absen: ${absenVal}<br><br>
 
 <h3>Skor: ${nilai}/${soal.length}</h3>
 
@@ -335,18 +345,21 @@ Absen: ${absen.value}<br><br>
 <button onclick="location.reload()">Kerjakan Lagi</button>
 `;
 
+// kirim ke Google Sheet
 fetch(URL,{
-  method:"POST",
-  body:JSON.stringify({
-    sekolah: sekolah.value,
-    nama: nama.value,
-    kelas: kelas.value,
-    absen: absen.value,
-    skor: nilai
-  })
+method:"POST",
+body:JSON.stringify({
+sekolah: sekolahVal,
+nama: namaVal,
+kelas: kelasVal,
+absen: absenVal,
+skor: nilai
+})
 });
 
-  function lihatPembahasan(){
+}
+
+function lihatPembahasan(){
 
 let h="<h3>Pembahasan</h3>";
 
@@ -365,6 +378,9 @@ Jawaban benar: <b style="color:green">${jawabanBenar}</b><br>
 `;
 }
 
+document.getElementById("halamanHasil").innerHTML += h;
+}
+
 halamanHasil.innerHTML += h;
 }
 
@@ -372,6 +388,7 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 
 

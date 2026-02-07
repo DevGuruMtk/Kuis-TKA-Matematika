@@ -196,13 +196,16 @@ let nilai=skor;
 let tgl=new Date();
 let tanggal=tgl.getDate()+"-"+(tgl.getMonth()+1)+"-"+tgl.getFullYear();
 
-halamanHasil.innerHTML=`
+  halamanHasil.innerHTML=`
 <h2>Hasil</h2>
 Sekolah: ${sekolah.value}<br>
 Nama: ${nama.value}<br>
 Kelas: ${kelas.value}<br>
 Absen: ${absen.value}<br><br>
+
 <h3>Skor: ${nilai}/${soal.length}</h3>
+
+<button onclick="lihatPembahasan()">Lihat Pembahasan</button>
 <button onclick="location.reload()">Kerjakan Lagi</button>
 `;
 
@@ -218,7 +221,30 @@ tanggal:tanggal
 })
 });
 }
+function lihatPembahasan(){
+
+let h="<h3>Pembahasan</h3>";
+
+for(let i=0;i<soal.length;i++){
+
+let jawabanSiswa = jawaban[i] !== undefined ? soal[i].p[jawaban[i]] : "Tidak dijawab";
+let jawabanBenar = soal[i].p[soal[i].j];
+
+h+=`
+<hr>
+<b>Soal ${i+1}</b><br>
+${soal[i].t}<br><br>
+
+Jawaban kamu: <b>${jawabanSiswa}</b><br>
+Jawaban benar: <b style="color:green">${jawabanBenar}</b><br>
+`;
+}
+
+halamanHasil.innerHTML += h;
+}
+
 </script>
 
 </body>
 </html>
+

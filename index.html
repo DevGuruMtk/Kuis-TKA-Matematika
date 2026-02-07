@@ -41,14 +41,17 @@ button{font-size:18px;padding:12px;margin-top:10px;width:100%}
 <div id="awal">
 <h2>Latihan TKA Matematika 1</h2>
 
+Sekolah:<br>
+<input id="sekolah" style="width:100%;font-size:18px"><br><br>
+
 Nama:<br>
-<input id="nama" style="width:100%;font-size:18px"><br><br>
+<input id="nama"><br><br>
 
 Kelas:<br>
-<input id="kelas" style="width:100%;font-size:18px"><br><br>
+<input id="kelas"><br><br>
 
 Absen:<br>
-<input id="absen" style="width:100%;font-size:18px"><br><br>
+<input id="absen"><br><br>
 
 <button onclick="mulai()">Mulai Latihan</button>
 </div>
@@ -71,27 +74,34 @@ Absen:<br>
 const URL="https://script.google.com/macros/s/AKfycbxlIx1xXK8zIdhcYJ_K7aCs8HRv7tdU3__r1a2nvpVpDSYmu9ZAy2QSstdhs47FlShdcQ/exec";
 
 let soal=[
-{t:"Promo beli 3 buku Rp12.000 diskon 25%. Bayar?",p:["27000","30000","33000","36000"],j:0},
-{t:"Suhu -4 naik 9 turun 6 = ?",p:["-1","-3","-5","-7"],j:3},
-{t:"Perbandingan 5:7 total 36. Perempuan?",p:["14","18","21","24"],j:2},
-{t:"Lampu 10 & 15 detik nyala bersama?",p:["20","25","30","45"],j:2},
-{t:"Tangki 4/5 dipakai 1/2 kapasitas. Sisa?",p:["1/10","3/10","2/5","1/2"],j:1},
-{t:"Modal 20kg x 12rb, untung 80rb. Jual/kg?",p:["14000","15000","16000","18000"],j:1},
-{t:"2³ x 3² =",p:["36","48","72","96"],j:2},
-{t:"√196 dibagi 7 =",p:["2","4","7","14"],j:2},
-{t:"x×0.4=32",p:["64","72","80","96"],j:2},
-{t:"Terbesar: 3/4,0.7,5/8,0.65",p:["3/4","0.7","5/8","0.65"],j:0}
+{t:"2 + 3 =",p:["4","5","6","7"],j:1},
+{t:"10 - 4 =",p:["4","5","6","7"],j:2},
+{t:"5 x 2 =",p:["10","12","15","20"],j:0},
+{t:"12 : 3 =",p:["2","3","4","6"],j:2},
+{t:"7 + 8 =",p:["13","14","15","16"],j:2},
+{t:"9 x 3 =",p:["18","21","24","27"],j:3},
+{t:"20 - 9 =",p:["10","11","12","13"],j:1},
+{t:"6 x 6 =",p:["30","32","34","36"],j:3},
+{t:"15 : 5 =",p:["2","3","4","5"],j:1},
+{t:"4 x 7 =",p:["24","26","28","30"],j:2}
 ];
 
-let index=0,skor=0,jawaban=[],waktu=900,intervalTimer;
+let index=0;
+let skor=0;
+let jawaban=[];
+let waktu=900;
+let intervalTimer;
 
 function mulai(){
-if(!nama.value||!kelas.value||!absen.value){
-alert("Isi nama, kelas, dan absen!");
+
+if(!sekolah.value || !nama.value || !kelas.value || !absen.value){
+alert("Isi semua data dulu!");
 return;
 }
+
 awal.style.display="none";
 kuis.style.display="flex";
+
 buatNav();
 tampilSoal();
 timerStart();
@@ -108,9 +118,10 @@ navSoal.innerHTML=h;
 function tampilSoal(){
 let s=soal[index];
 let h=`<b>Soal ${index+1}</b><br><br>${s.t}<br><br>`;
+
 for(let i=0;i<s.p.length;i++){
 let c=(jawaban[index]==i)?"checked":"";
-h+=`<label style="display:block;margin:8px 0;font-size:18px">
+h+=`<label style="display:block;margin:8px">
 <input type="radio" name="j" value="${i}" ${c}> ${s.p[i]}
 </label>`;
 }
@@ -137,9 +148,11 @@ tampilSoal();
 
 function timerStart(){
 timer.innerText=format(waktu);
+
 intervalTimer=setInterval(()=>{
 waktu--;
 timer.innerText=format(waktu);
+
 if(waktu<=0){
 alert("Waktu habis");
 selesaiKuis();
@@ -154,6 +167,7 @@ return m+":"+(s<10?"0"+s:s);
 }
 
 function selesaiKuis(){
+
 let yakin=confirm("Kirim jawaban?");
 if(!yakin)return;
 
@@ -164,22 +178,24 @@ halamanHasil.style.display="block";
 
 let nilai=skor;
 
+let tgl=new Date();
+let tanggal=tgl.getDate()+"-"+(tgl.getMonth()+1)+"-"+tgl.getFullYear();
+
 halamanHasil.innerHTML=`
-<h2>Hasil Latihan</h2>
+<h2>Hasil</h2>
+Sekolah: ${sekolah.value}<br>
 Nama: ${nama.value}<br>
 Kelas: ${kelas.value}<br>
 Absen: ${absen.value}<br><br>
 <h3>Skor: ${nilai}/${soal.length}</h3>
 <button onclick="review()">Lihat Pembahasan</button>
-<button onclick="ulang()">Latihan Lagi</button>
+<button onclick="ulang()">Kerjakan Lagi</button>
 `;
-
-  let tgl=new Date();
-let tanggal=tgl.getDate()+"-"+(tgl.getMonth()+1)+"-"+tgl.getFullYear();
 
 fetch(URL,{
 method:"POST",
 body:JSON.stringify({
+sekolah:sekolah.value,
 nama:nama.value,
 kelas:kelas.value,
 absen:absen.value,
@@ -187,31 +203,29 @@ skor:nilai,
 tanggal:tanggal
 })
 });
+}
 
 function review(){
 let h="<h3>Pembahasan</h3>";
+
 for(let i=0;i<soal.length;i++){
 h+=`<hr>${soal[i].t}<br>
 Jawabanmu: ${soal[i].p[jawaban[i]]}<br>
 Benar: ${soal[i].p[soal[i].j]}<br>`;
 }
+
 halamanHasil.innerHTML+=h;
 }
 
 function ulang(){
 location.reload();
 }
-let t=new Date();
-let hari=t.getDate();
-let bulan=t.getMonth()+1;
-let tahun=t.getFullYear();
-document.getElementById("tanggal").innerHTML=
-"Tanggal: "+hari+"-"+bulan+"-"+tahun;
 
 </script>
 
 </body>
 </html>
+
 
 
 

@@ -213,17 +213,20 @@ let intervalTimer;
 
 function mulai(){
 
-  document.getElementById("judulSekolah").innerText = sekolah.value;
+let sekolahVal = document.getElementById("sekolah").value;
+let namaVal = document.getElementById("nama").value;
+let kelasVal = document.getElementById("kelas").value;
+let absenVal = document.getElementById("absen").value;
 
-if(!sekolah.value||!nama.value||!kelas.value||!absen.value){
+if(!sekolahVal || !namaVal || !kelasVal || !absenVal){
 alert("Isi semua data dulu!");
 return;
 }
 
-document.getElementById("judulSekolah").innerText = sekolah.value;
+document.getElementById("judulSekolah").innerText = sekolahVal;
 
-awal.style.display="none";
-kuis.style.display="block";
+document.getElementById("awal").style.display="none";
+document.getElementById("kuis").style.display="block";
 
 buatNav();
 tampilSoal();

@@ -109,6 +109,32 @@ button:hover{
   display:none;
   padding:20px;
 }
+.boxSoal{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  max-width:600px;
+}
+
+.opsi{
+  display:block;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.opsi:hover{
+  background:#f3f4f6;
+}
+
+.opsi input{
+  margin-right:10px;
+  transform:scale(1.2);
+}
+
 </style>
 </head>
 
@@ -205,15 +231,27 @@ navSoal.innerHTML=h;
 }
 
 function tampilSoal(){
-let s=soal[index];
-let h=`<b>Soal ${index+1}</b><br><br>${s.t}<br><br>`;
+let s = soal[index];
+
+let h = `
+<div class="boxSoal">
+<b>Soal ${index+1}</b><br><br>
+${s.t}<br><br>
+`;
+
 for(let i=0;i<s.p.length;i++){
-let c=(jawaban[index]==i)?"checked":"";
-h+=`<label style="display:block;margin:8px">
-<input type="radio" name="j" value="${i}" ${c}> ${s.p[i]}
-</label>`;
+let c = (jawaban[index]==i)?"checked":"";
+
+h += `
+<label class="opsi">
+<input type="radio" name="j" value="${i}" ${c}>
+<span>${s.p[i]}</span>
+</label>
+`;
 }
-kotakSoal.innerHTML=h;
+
+h += `</div>`;
+kotakSoal.innerHTML = h;
 }
 
 function nextSoal(){
@@ -313,5 +351,6 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 

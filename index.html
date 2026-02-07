@@ -116,24 +116,27 @@ button:hover{
   box-shadow:0 2px 6px rgba(0,0,0,0.1);
   max-width:600px;
 }
-
 .opsi{
-  display:block;
-  padding:12px;
+  display:flex;
+  align-items:center;
+  padding:14px;
   border:1px solid #ddd;
-  border-radius:8px;
-  margin-bottom:10px;
+  border-radius:10px;
+  margin-bottom:12px;
   cursor:pointer;
+  background:white;
+  font-size:18px;
 }
 
 .opsi:hover{
-  background:#f3f4f6;
+  background:#f1f5f9;
 }
 
 .opsi input{
-  margin-right:10px;
-  transform:scale(1.2);
+  margin-right:12px;
+  transform:scale(1.3);
 }
+
 
 </style>
 </head>
@@ -229,7 +232,6 @@ h+=`<button id="b${i}" onclick="lompat(${i})">${i+1}</button>`;
 }
 navSoal.innerHTML=h;
 }
-
 function tampilSoal(){
 let s = soal[index];
 
@@ -351,6 +353,7 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 
 

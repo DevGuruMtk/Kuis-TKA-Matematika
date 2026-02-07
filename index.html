@@ -6,15 +6,19 @@
 <title>Latihan Matematika</title>
 
 <style>
-body
-  <div style="text-align:center;padding:10px">
-<h2>SMP Negeri 2 Kebumen</h2>
-<p id="tanggal"></p>
-</div>
+body{
+  font-family:Arial;
+  margin:0;
+  background:#f2f2f2;
+}
 
-  {font-family:Arial;margin:0;background:#f2f2f2}
 #awal{padding:20px}
-#kuis{display:none;height:100vh}
+
+#kuis{
+  display:none;   /* ⬅️ ini penting */
+  height:100vh;
+}
+
 #navSoal{
   width:70px;
   background:#fff;
@@ -22,21 +26,39 @@ body
   padding:5px;
   overflow-y:auto
 }
+
 #navSoal button{
   width:45px;
   margin:4px;
   padding:8px;
   font-size:16px
 }
+
 .dijawab{background:#4CAF50;color:#fff}
+
 #konten{flex:1;padding:15px}
+
 #timer{color:red;font-size:22px;font-weight:bold}
-button{font-size:18px;padding:12px;margin-top:10px;width:100%}
-#halamanHasil{display:none;padding:20px}
+
+button{
+  font-size:18px;
+  padding:12px;
+  margin-top:10px;
+  width:100%
+}
+
+#halamanHasil{
+  display:none;
+  padding:20px
+}
 </style>
 </head>
 
 <body>
+
+<div style="text-align:center;padding:10px">
+<h2>SMP Negeri 2 Kebumen</h2>
+</div>
 
 <div id="awal">
 <h2>Latihan TKA Matematika 1</h2>
@@ -56,7 +78,8 @@ Absen:<br>
 <button onclick="mulai()">Mulai Latihan</button>
 </div>
 
-<div id="kuis" style="display:flex">
+<div id="kuis">
+<div style="display:flex;height:100%">
 <div id="navSoal"></div>
 
 <div id="konten">
@@ -65,6 +88,7 @@ Absen:<br>
 
 <button onclick="nextSoal()">Simpan & Next</button>
 <button onclick="selesaiKuis()">Kirim Jawaban</button>
+</div>
 </div>
 </div>
 
@@ -93,14 +117,13 @@ let waktu=900;
 let intervalTimer;
 
 function mulai(){
-
-if(!sekolah.value || !nama.value || !kelas.value || !absen.value){
+if(!sekolah.value||!nama.value||!kelas.value||!absen.value){
 alert("Isi semua data dulu!");
 return;
 }
 
-awal.style.display="none";
-kuis.style.display="flex";
+document.getElementById("awal").style.display="none";
+document.getElementById("kuis").style.display="block";
 
 buatNav();
 tampilSoal();
@@ -118,7 +141,6 @@ navSoal.innerHTML=h;
 function tampilSoal(){
 let s=soal[index];
 let h=`<b>Soal ${index+1}</b><br><br>${s.t}<br><br>`;
-
 for(let i=0;i<s.p.length;i++){
 let c=(jawaban[index]==i)?"checked":"";
 h+=`<label style="display:block;margin:8px">
@@ -148,15 +170,10 @@ tampilSoal();
 
 function timerStart(){
 timer.innerText=format(waktu);
-
 intervalTimer=setInterval(()=>{
 waktu--;
 timer.innerText=format(waktu);
-
-if(waktu<=0){
-alert("Waktu habis");
-selesaiKuis();
-}
+if(waktu<=0){selesaiKuis();}
 },1000);
 }
 
@@ -167,14 +184,12 @@ return m+":"+(s<10?"0"+s:s);
 }
 
 function selesaiKuis(){
-
-let yakin=confirm("Kirim jawaban?");
-if(!yakin)return;
+if(!confirm("Kirim jawaban?"))return;
 
 clearInterval(intervalTimer);
 
-kuis.style.display="none";
-halamanHasil.style.display="block";
+document.getElementById("kuis").style.display="none";
+document.getElementById("halamanHasil").style.display="block";
 
 let nilai=skor;
 
@@ -188,8 +203,7 @@ Nama: ${nama.value}<br>
 Kelas: ${kelas.value}<br>
 Absen: ${absen.value}<br><br>
 <h3>Skor: ${nilai}/${soal.length}</h3>
-<button onclick="review()">Lihat Pembahasan</button>
-<button onclick="ulang()">Kerjakan Lagi</button>
+<button onclick="location.reload()">Kerjakan Lagi</button>
 `;
 
 fetch(URL,{
@@ -204,28 +218,7 @@ tanggal:tanggal
 })
 });
 }
-
-function review(){
-let h="<h3>Pembahasan</h3>";
-
-for(let i=0;i<soal.length;i++){
-h+=`<hr>${soal[i].t}<br>
-Jawabanmu: ${soal[i].p[jawaban[i]]}<br>
-Benar: ${soal[i].p[soal[i].j]}<br>`;
-}
-
-halamanHasil.innerHTML+=h;
-}
-
-function ulang(){
-location.reload();
-}
-
 </script>
 
 </body>
 </html>
-
-
-
-

@@ -262,7 +262,7 @@ h+=`<button id="b${i}" onclick="lompat(${i})">${i+1}</button>`;
 navSoal.innerHTML=h;
 }
 
-  function tampilSoal(){
+function tampilSoal(){
 let s = soal[index];
 let huruf = ["A","B","C","D","E"];
 
@@ -273,10 +273,11 @@ ${s.t}<br><br>
 `;
 
 for(let i=0;i<s.p.length;i++){
+let aktif = (jawaban[index]==i)?"aktif":"";
 let c = (jawaban[index]==i)?"checked":"";
 
 h += `
-<label class="opsi">
+<label class="opsi ${aktif}">
 <input type="radio" name="j" value="${i}" ${c}>
 <span class="huruf">${huruf[i]}.</span>
 <span class="teks">${s.p[i]}</span>
@@ -286,6 +287,14 @@ h += `
 
 h += `</div>`;
 kotakSoal.innerHTML = h;
+
+/* warna aktif */
+document.querySelectorAll('input[name="j"]').forEach(r=>{
+r.addEventListener("change",()=>{
+document.querySelectorAll(".opsi").forEach(o=>o.classList.remove("aktif"));
+r.parentElement.classList.add("aktif");
+});
+});
 }
 
 function nextSoal(){
@@ -385,6 +394,7 @@ halamanHasil.innerHTML += h;
 
 </body>
 </html>
+
 
 
 

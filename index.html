@@ -116,10 +116,9 @@ button:hover{
   box-shadow:0 2px 6px rgba(0,0,0,0.1);
   max-width:600px;
 }
-  .opsi{
+.opsi{
   display:flex;
   align-items:center;
-  gap:12px;
   padding:16px;
   border:2px solid #e5e7eb;
   border-radius:12px;
@@ -129,6 +128,12 @@ button:hover{
   font-size:18px;
   transition:0.2s;
 }
+  
+  .opsi.aktif{
+  border-color:#2563eb;
+  background:#eef4ff;
+}
+
 
 .opsi:hover{
   border-color:#2563eb;
@@ -136,19 +141,30 @@ button:hover{
 }
 
 .opsi input{
-  transform:scale(1.3);
+  margin-right:14px;
+  transform:scale(1.2);
 }
 
 .huruf{
   font-weight:bold;
-  width:30px;
+  margin-right:10px;
 }
 
 .teks{
-  flex:1;
   text-align:left;
 }
 
+  .opsi:has(input:checked){
+  border-color:#2563eb;
+  background:#eef4ff;
+}
+
+  .belum{
+background:#ef4444 !important;
+color:white !important;
+}
+
+  
 </style>
 </head>
 
@@ -196,6 +212,10 @@ Absen:<br>
 <div id="halamanHasil"></div>
 
 <script>
+  window.onbeforeunload = function() {
+  return "Jawaban belum dikirim!";
+};
+
 const URL="https://script.google.com/macros/s/AKfycbxlIx1xXK8zIdhcYJ_K7aCs8HRv7tdU3__r1a2nvpVpDSYmu9ZAy2QSstdhs47FlShdcQ/exec";
 
 let soal=[
@@ -212,7 +232,6 @@ let soal=[
 ];
 
 let index=0;
-let skor=0;
 let jawaban=[];
 let waktu=600;
 let intervalTimer;
@@ -229,8 +248,12 @@ alert("Isi semua data dulu!");
 return;
 }
 
-document.getElementById("judulSekolah").innerText = sekolahVal;
+if(document.documentElement.requestFullscreen){
+  document.documentElement.requestFullscreen();
+}
 
+
+document.getElementById("judulSekolah").innerText = sekolahVal;
 document.getElementById("awal").style.display="none";
 document.getElementById("kuis").style.display="block";
 
@@ -242,12 +265,12 @@ timerStart();
 function buatNav(){
 let h="";
 for(let i=0;i<soal.length;i++){
-h+=`<button id="b${i}" onclick="lompat(${i})">${i+1}</button>`;
+h+=`<button id="b${i}" class="belum" onclick="lompat(${i})">${i+1}</button>`;
 }
 navSoal.innerHTML=h;
 }
 
-function tampilSoal(){
+  function tampilSoal(){
 let s = soal[index];
 let huruf = ["A","B","C","D"];
 
@@ -258,19 +281,34 @@ ${s.t}<br><br>
 `;
 
 for(let i=0;i<s.p.length;i++){
-let c = (jawaban[index]==i)?"checked":"";
+let checked = (jawaban[index]==i) ? "checked" : "";
+let aktif = (jawaban[index]==i) ? "aktif" : "";
 
 h += `
-<label class="opsi">
-<input type="radio" name="j" value="${i}" ${c}>
-<span class="huruf">${huruf[i]}.</span>
-<span class="teks">${s.p[i]}</span>
+<label class="opsi ${aktif}">
+  <input type="radio" name="j" value="${i}" ${checked}>
+  <span class="huruf">${huruf[i]}.</span>
+  <span class="teks">${s.p[i]}</span>
 </label>
 `;
 }
 
 h += `</div>`;
 kotakSoal.innerHTML = h;
+
+/* event radio saja sudah cukup */
+document.querySelectorAll('input[name="j"]').forEach((radio,i)=>{
+  radio.addEventListener("change",()=>{
+    jawaban[index] = i;
+
+    document.querySelectorAll(".opsi").forEach(o=>o.classList.remove("aktif"));
+    radio.closest(".opsi").classList.add("aktif");
+
+    let btn = document.getElementById("b"+index);
+btn.classList.remove("belum");
+btn.classList.add("dijawab");
+  });
+});
 }
 
 function nextSoal(){
@@ -278,10 +316,16 @@ let p=document.querySelector('input[name="j"]:checked');
 if(!p){alert("Pilih dulu");return;}
 
 jawaban[index]=Number(p.value);
-document.getElementById("b"+index).classList.add("dijawab");
+let btn = document.getElementById("b"+index);
+btn.classList.remove("belum");
+btn.classList.add("dijawab");
 
-index++;
-if(index<soal.length)tampilSoal();
+if(index < soal.length-1){
+  index++;
+  tampilSoal();
+}else{
+  selesaiKuis();
+}
 }
 
 function lompat(n){
@@ -298,8 +342,9 @@ waktu--;
 timerEl.innerText = format(waktu);
 
 if(waktu<=0){
-selesaiKuis();
+selesaiKuisAuto();
 }
+
 },1000);
 }
 
@@ -311,6 +356,19 @@ return m+":"+(s<10?"0"+s:s);
 
 function selesaiKuis(){
 
+// cek apakah masih ada yang belum dijawab
+let belum = jawaban.filter(j => j === undefined).length;
+
+if(belum > 0){
+  if(!confirm("Masih ada soal yang belum dijawab. Yakin kirim?")){
+    return;
+  }
+}else{
+  if(!confirm("Yakin ingin mengirim jawaban?")){
+    return;
+  }
+}
+  
 clearInterval(intervalTimer);
 
 document.getElementById("kuis").style.display="none";
@@ -347,7 +405,49 @@ sekolah: sekolahVal,
 nama: namaVal,
 kelas: kelasVal,
 absen: absenVal,
-skor: nilai
+skor: nilai,
+tanggal: new Date().toLocaleString()
+})
+});
+
+} // ← INI YANG KURANG (penutup selesaiKuis)
+
+  function selesaiKuisAuto(){
+
+clearInterval(intervalTimer);
+
+document.getElementById("kuis").style.display="none";
+document.getElementById("halamanHasil").style.display="block";
+
+let sekolahVal = document.getElementById("sekolah").value;
+let namaVal = document.getElementById("nama").value;
+let kelasVal = document.getElementById("kelas").value;
+let absenVal = document.getElementById("absen").value;
+
+let nilai = 0;
+for(let i=0;i<soal.length;i++){
+if(jawaban[i]==soal[i].j) nilai++;
+}
+
+document.getElementById("halamanHasil").innerHTML = `
+<h2>Waktu Habis</h2>
+Sekolah: ${sekolahVal}<br>
+Nama: ${namaVal}<br>
+Kelas: ${kelasVal}<br>
+Absen: ${absenVal}<br><br>
+
+<h3>Skor: ${nilai}/${soal.length}</h3>
+`;
+
+fetch(URL,{
+method:"POST",
+body:JSON.stringify({
+sekolah: sekolahVal,
+nama: namaVal,
+kelas: kelasVal,
+absen: absenVal,
+skor: nilai,
+tanggal: new Date().toLocaleString()
 })
 });
 }
@@ -371,17 +471,9 @@ Jawaban benar: <b style="color:green">${benar}</b>
 
 document.getElementById("halamanHasil").innerHTML += h;
 }
+  
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
 

@@ -6,7 +6,13 @@
 <title>Latihan Matematika</title>
 
 <style>
-body{font-family:Arial;margin:0;background:#f2f2f2}
+body
+  <div style="text-align:center;padding:10px">
+<h2>SMP Negeri 2 Kebumen</h2>
+<p id="tanggal"></p>
+</div>
+
+  {font-family:Arial;margin:0;background:#f2f2f2}
 #awal{padding:20px}
 #kuis{display:none;height:100vh}
 #navSoal{
@@ -192,8 +198,16 @@ halamanHasil.innerHTML+=h;
 function ulang(){
 location.reload();
 }
+let t=new Date();
+let hari=t.getDate();
+let bulan=t.getMonth()+1;
+let tahun=t.getFullYear();
+document.getElementById("tanggal").innerHTML=
+"Tanggal: "+hari+"-"+bulan+"-"+tahun;
+
 </script>
 
 </body>
 </html>
+
 

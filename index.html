@@ -1,280 +1,193 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Latihan Matematika</title>
+<title>CBT Matematika</title>
 
 <style>
 body{
-  font-family:Segoe UI, Arial;
-  margin:0;
-  background:#eef2f7;
+font-family:Segoe UI,Arial;
+margin:0;
+background:#eef2f7;
 }
 
 .header{
-  background:#1e3a8a;
-  color:white;
-  padding:15px;
-  text-align:center;
-}
-
-.header h1{
-  margin:0;
-  font-size:22px;
-}
-
-.header h2{
-  margin:5px 0 0;
-  font-size:16px;
-  font-weight:normal;
+background:#1e3a8a;
+color:#fff;
+padding:15px;
+text-align:center;
 }
 
 .card{
-  background:white;
-  margin:20px auto;
-  padding:20px;
-  border-radius:12px;
-  max-width:500px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
+background:#fff;
+margin:20px auto;
+padding:20px;
+border-radius:12px;
+max-width:500px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 input{
-  width:100%;
-  padding:10px;
-  font-size:16px;
-  margin-top:5px;
-  margin-bottom:15px;
-  border-radius:8px;
-  border:1px solid #ccc;
+width:100%;
+padding:10px;
+font-size:16px;
+margin-bottom:12px;
+border-radius:8px;
+border:1px solid #ccc;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  border:none;
-  border-radius:8px;
-  background:#2563eb;
-  color:white;
-  margin-top:10px;
+width:100%;
+padding:14px;
+font-size:16px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:#fff;
+margin-top:10px;
+cursor:pointer;
 }
 
-button:hover{
-  background:#1d4ed8;
-}
+#kuis{display:none}
 
-#kuis{
-  display:none;
-}
-
-.layout{
-  display:flex;
-  height:100vh;
-}
+.layout{display:flex;height:100vh}
 
 #navSoal{
-  width:70px;
-  background:#fff;
-  border-right:2px solid #ddd;
-  padding:5px;
+width:80px;
+background:#fff;
+border-right:2px solid #ddd;
+padding:5px;
 }
 
 #navSoal button{
-  width:45px;
-  margin:4px;
-  padding:8px;
-  font-size:14px;
-  background:#e5e7eb;
-  color:black;
+width:50px;
+margin:4px;
+padding:8px;
+background:#e5e7eb;
+color:#000;
 }
 
-.dijawab{
-  background:#22c55e !important;
-  color:white !important;
-}
+.dijawab{background:#22c55e!important;color:#fff}
+.belum{background:#ef4444!important;color:#fff}
 
-#konten{
-  flex:1;
-  padding:20px;
-}
+#konten{flex:1;padding:20px}
+#timer{color:red;font-size:20px;font-weight:bold}
 
-#timer{
-  color:red;
-  font-size:20px;
-  font-weight:bold;
-}
-
-#halamanHasil{
-  display:none;
-  padding:20px;
-}
 .boxSoal{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.1);
-  max-width:600px;
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+max-width:650px;
 }
+
 .opsi{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:18px;
-  border:2px solid #e5e7eb;
-  border-radius:14px;
-  margin-bottom:14px;
-  cursor:pointer;
-  background:#fff;
-  font-size:18px;
-  transition:0.2s;
-}
- .opsi.aktif{
-  border-color:#2563eb;
-  background:#eef4ff;
-  transform:scale(1.01);
-} 
- .opsi.aktif .huruf{
-  background:#2563eb;
-  color:white;
+display:flex;
+align-items:center;
+gap:14px;
+padding:18px;
+border:2px solid #e5e7eb;
+border-radius:14px;
+margin-bottom:14px;
+cursor:pointer;
+font-size:18px;
 }
 
+.opsi:hover{border-color:#2563eb}
 
-.opsi:hover{
-  border-color:#2563eb;
-  background:#f8fbff;
-}
-
-.opsi input{
-  margin-right:14px;
-  transform:scale(1.2);
+.opsi.aktif{
+border-color:#2563eb;
+background:#eef4ff;
 }
 
 .huruf{
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  background:#e5e7eb;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
+width:35px;
+height:35px;
+border-radius:50%;
+background:#e5e7eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
 }
 
-.teks{
-  flex:1;
-  text-align:left;
-  font-size:18px;
+.opsi.aktif .huruf{
+background:#2563eb;
+color:#fff;
 }
-
-  .opsi:has(input:checked){
-  border-color:#2563eb;
-  background:#eef4ff;
-}
-
-  .belum{
-background:#ef4444 !important;
-color:white !important;
-}
-  
 </style>
 </head>
 
 <body>
 
 <div class="header">
-  <h1 id="judulSekolah">Latihan</h1>
-  <h2>Latihan TKA Matematika 1</h2>
+<h1 id="judulSekolah">Latihan</h1>
+<h2>CBT Matematika</h2>
 </div>
 
 <div id="awal" class="card">
-<h2>Latihan TKA Matematika 1</h2>
-
-Sekolah:<br>
-<input id="sekolah" style="width:100%;font-size:18px"><br><br>
-
-Nama:<br>
-<input id="nama"><br><br>
-
-Kelas:<br>
-<input id="kelas"><br><br>
-
-Absen:<br>
-<input id="absen"><br><br>
-
-<button onclick="mulai()">Mulai Latihan</button>
+Sekolah:
+<input id="sekolah">
+Nama:
+<input id="nama">
+Kelas:
+<input id="kelas">
+Absen:
+<input id="absen">
+<button onclick="mulai()">Mulai</button>
 </div>
 
-  <div id="kuis">
+<div id="kuis">
 <div class="layout">
-
 <div id="navSoal"></div>
 
 <div id="konten">
-<p>Waktu: <span id="timer"></span></p>
+Waktu: <span id="timer"></span>
 <div id="kotakSoal"></div>
-
-<button onclick="nextSoal()">Simpan & Next</button>
-<button onclick="selesaiKuis()">Kirim Jawaban</button>
+<button onclick="nextSoal()">Next</button>
+<button onclick="selesaiKuis()">Kirim</button>
 </div>
-
 </div>
 </div>
 
 <div id="halamanHasil"></div>
 
 <script>
-let ujianAktif = false;
+const URL="https://script.google.com/macros/s/AKfycbxbmqFl9vdsJ5vcMoNN2fg-QBG7Zo_8TnH0gfLv3GEJ_NEDtXnJRg8b6TYUShpN5jiY/exec";
 
-  window.onbeforeunload = function() {
-  return "Jawaban belum dikirim!";
-};
-
-const URL="https://script.google.com/macros/s/AKfycbxlIx1xXK8zIdhcYJ_K7aCs8HRv7tdU3__r1a2nvpVpDSYmu9ZAy2QSstdhs47FlShdcQ/exec";
-
-let soal=[
-{t:"2 + 3 =",p:["4","5","6","7"],j:1},
-{t:"10 - 4 =",p:["4","5","6","7"],j:2},
-{t:"5 x 2 =",p:["10","12","15","20"],j:0},
-{t:"12 : 3 =",p:["2","3","4","6"],j:2},
-{t:"7 + 8 =",p:["13","14","15","16"],j:2},
-{t:"9 x 3 =",p:["18","21","24","27"],j:3},
-{t:"20 - 9 =",p:["10","11","12","13"],j:1},
-{t:"6 x 6 =",p:["30","32","34","36"],j:3},
-{t:"15 : 5 =",p:["2","3","4","5"],j:1},
-{t:"4 x 7 =",p:["24","26","28","30"],j:2}
-];
+let soal=[];
+let ujianAktif=false;
+let pelanggaran=0;
 
 let index=0;
 let jawaban=[];
-let waktu=600;
-let intervalTimer;
+let waktu=300;
+let timerInt;
 
-function mulai(){
-  ujianAktif = true;
+async function ambilSoal(){
+  let res = await fetch(URL);
+  soal = await res.json();
+}
 
-let sekolahVal = document.getElementById("sekolah").value;
-let namaVal = document.getElementById("nama").value;
-let kelasVal = document.getElementById("kelas").value;
-let absenVal = document.getElementById("absen").value;
+async function mulai(){
 
-if(!sekolahVal || !namaVal || !kelasVal || !absenVal){
-alert("Isi semua data dulu!");
+if(!sekolah.value||!nama.value||!kelas.value||!absen.value){
+alert("Isi data dulu");
 return;
 }
 
-if(document.documentElement.requestFullscreen){
-  document.documentElement.requestFullscreen();
-}
+ujianAktif=true;
+document.documentElement.requestFullscreen();
 
+awal.style.display="none";
+kuis.style.display="block";
 
-document.getElementById("judulSekolah").innerText = sekolahVal;
-document.getElementById("awal").style.display="none";
-document.getElementById("kuis").style.display="block";
-
+await ambilSoal();
 buatNav();
 tampilSoal();
-timerStart();
+startTimer();
 }
 
 function buatNav(){
@@ -285,286 +198,102 @@ h+=`<button id="b${i}" class="belum" onclick="lompat(${i})">${i+1}</button>`;
 navSoal.innerHTML=h;
 }
 
-  function tampilSoal(){
-let s = soal[index];
-let huruf = ["A","B","C","D"];
+function tampilSoal(){
+let s=soal[index];
+let huruf=["A","B","C","D"];
 
-let h = `
-<div class="boxSoal">
-<b>Soal ${index+1}</b><br><br>
-${s.t}<br><br>
-`;
+let h=`<div class="boxSoal">
+<b>Soal ${index+1}</b><br><br>${s.t}<br><br>`;
 
 for(let i=0;i<s.p.length;i++){
-let checked = (jawaban[index]==i) ? "checked" : "";
-let aktif = (jawaban[index]==i) ? "aktif" : "";
+let aktif=(jawaban[index]==i)?"aktif":"";
+let checked=(jawaban[index]==i)?"checked":"";
 
-h += `
+h+=`
 <label class="opsi ${aktif}">
-  <input type="radio" name="j" value="${i}" ${checked}>
-  <span class="huruf">${huruf[i]}.</span>
-  <span class="teks">${s.p[i]}</span>
-</label>
-`;
+<input type="radio" name="j" value="${i}" ${checked}>
+<span class="huruf">${huruf[i]}</span>
+<span>${s.p[i]}</span>
+</label>`;
 }
 
-h += `</div>`;
-kotakSoal.innerHTML = h;
+h+=`</div>`;
+kotakSoal.innerHTML=h;
 
-/* event radio saja sudah cukup */
-document.querySelectorAll('input[name="j"]').forEach((radio,i)=>{
-  radio.addEventListener("change",()=>{
-    jawaban[index] = i;
-
-    document.querySelectorAll(".opsi").forEach(o=>o.classList.remove("aktif"));
-    radio.closest(".opsi").classList.add("aktif");
-
-    let btn = document.getElementById("b"+index);
-btn.classList.remove("belum");
-btn.classList.add("dijawab");
-  });
+document.querySelectorAll('input[name="j"]').forEach((r,i)=>{
+r.onchange=()=>{
+jawaban[index]=i;
+document.querySelectorAll(".opsi").forEach(o=>o.classList.remove("aktif"));
+r.closest(".opsi").classList.add("aktif");
+document.getElementById("b"+index).className="dijawab";
+};
 });
 }
 
 function nextSoal(){
-let p=document.querySelector('input[name="j"]:checked');
-if(!p){alert("Pilih dulu");return;}
-
-jawaban[index]=Number(p.value);
-let btn = document.getElementById("b"+index);
-btn.classList.remove("belum");
-btn.classList.add("dijawab");
-
-if(index < soal.length-1){
-  index++;
-  tampilSoal();
-}else{
-  selesaiKuis();
-
-}
-}
-
-function lompat(n){
-index=n;
+if(jawaban[index]==undefined){alert("Pilih dulu");return;}
+index++;
+if(index>=soal.length){selesaiKuis();return;}
 tampilSoal();
 }
 
-function timerStart(){
-let timerEl = document.getElementById("timer");
-timerEl.innerText = format(waktu);
+function lompat(n){index=n;tampilSoal();}
 
-intervalTimer = setInterval(()=>{
+function startTimer(){
+timerInt=setInterval(()=>{
 waktu--;
-timerEl.innerText = format(waktu);
-
-if(waktu<=0){
-selesaiKuisAuto();
-}
-
+timer.innerText=waktu;
+if(waktu<=0) selesaiKuisAuto();
 },1000);
 }
 
-function format(d){
-let m=Math.floor(d/60);
-let s=d%60;
-return m+":"+(s<10?"0"+s:s);
-}
-
 function selesaiKuis(){
-  ujianAktif = false;
-
-// cek apakah masih ada yang belum dijawab
-let belum = jawaban.filter(j => j === undefined).length;
-
-if(belum > 0){
-  if(!confirm("Masih ada soal yang belum dijawab. Yakin kirim?")){
-    return;
-  }
-}else{
-  if(!confirm("Yakin ingin mengirim jawaban?")){
-    return;
-  }
+ujianAktif=false;
+clearInterval(timerInt);
+tampilkanHasil();
 }
-  
-clearInterval(intervalTimer);
 
-document.getElementById("kuis").style.display="none";
-document.getElementById("halamanHasil").style.display="block";
+function selesaiKuisAuto(){
+ujianAktif=false;
+clearInterval(timerInt);
+alert("Ujian dikirim otomatis");
+tampilkanHasil();
+}
 
-let sekolahVal = document.getElementById("sekolah").value;
-let namaVal = document.getElementById("nama").value;
-let kelasVal = document.getElementById("kelas").value;
-let absenVal = document.getElementById("absen").value;
+function tampilkanHasil(){
+kuis.style.display="none";
+halamanHasil.style.display="block";
 
-/* hitung skor */
-let nilai = 0;
+let skor=0;
 for(let i=0;i<soal.length;i++){
-if(jawaban[i]==soal[i].j) nilai++;
+if(jawaban[i]==soal[i].j) skor++;
 }
 
-document.getElementById("halamanHasil").innerHTML = `
-<h2>Hasil</h2>
-Sekolah: ${sekolahVal}<br>
-Nama: ${namaVal}<br>
-Kelas: ${kelasVal}<br>
-Absen: ${absenVal}<br><br>
-
-<h3>Skor: ${nilai}/${soal.length}</h3>
-
-<button onclick="lihatPembahasan()">Lihat Pembahasan</button>
-<button onclick="location.reload()">Kerjakan Lagi</button>
-`;
-
-fetch(URL,{
-method:"POST",
-body:JSON.stringify({
-sekolah: sekolahVal,
-nama: namaVal,
-kelas: kelasVal,
-absen: absenVal,
-skor: nilai,
-tanggal: new Date().toLocaleString()
-})
-});
-
-} // ← INI YANG KURANG (penutup selesaiKuis)
-document.getElementById("halamanHasil").innerHTML = `
-<h2>Hasil</h2>
-
-<h3>Skor: ${nilai}/${soal.length}</h3>
-
-<button onclick="lihatPembahasan()">Lihat Pembahasan</button>
-<button onclick="keluarFullscreen()">Keluar</button>
-<button onclick="location.reload()">Ulang</button>
-`;
-
-  function selesaiKuisAuto(){
-    ujianAktif = false;
-clearInterval(intervalTimer);
-
-document.getElementById("kuis").style.display="none";
-document.getElementById("halamanHasil").style.display="block";
-
-let sekolahVal = document.getElementById("sekolah").value;
-let namaVal = document.getElementById("nama").value;
-let kelasVal = document.getElementById("kelas").value;
-let absenVal = document.getElementById("absen").value;
-
-let nilai = 0;
-for(let i=0;i<soal.length;i++){
-if(jawaban[i]==soal[i].j) nilai++;
-}
-
-document.getElementById("halamanHasil").innerHTML = `
-<h2>Waktu Habis</h2>
-Sekolah: ${sekolahVal}<br>
-Nama: ${namaVal}<br>
-Kelas: ${kelasVal}<br>
-Absen: ${absenVal}<br><br>
-
-<h3>Skor: ${nilai}/${soal.length}</h3>
-`;
-
-fetch(URL,{
-method:"POST",
-body:JSON.stringify({
-sekolah: sekolahVal,
-nama: namaVal,
-kelas: kelasVal,
-absen: absenVal,
-skor: nilai,
-tanggal: new Date().toLocaleString()
-})
-});
-}
-
-function lihatPembahasan(){
-
-let h="<h3>Pembahasan</h3>";
-
-for(let i=0;i<soal.length;i++){
-let jw = jawaban[i]!==undefined?soal[i].p[jawaban[i]]:"Tidak dijawab";
-let benar = soal[i].p[soal[i].j];
-
-h+=`
-<hr>
-<b>Soal ${i+1}</b><br>
-${soal[i].t}<br>
-Jawaban kamu: ${jw}<br>
-Jawaban benar: <b style="color:green">${benar}</b>
+halamanHasil.innerHTML=`
+<h2>Skor ${skor}/${soal.length}</h2>
+<button onclick="keluar()">Keluar</button>
 `;
 }
 
-document.getElementById("halamanHasil").innerHTML += h;
+function keluar(){
+if(document.fullscreenElement) document.exitFullscreen();
+location.reload();
 }
 
-  // ====== KUNCI FULLSCREEN ======
-document.addEventListener("fullscreenchange", () => {
-
-  if(ujianAktif && !document.fullscreenElement){
-    alert("Tidak boleh keluar fullscreen!");
-    setTimeout(()=>{
-      document.documentElement.requestFullscreen();
-    }, 100);
-  }
-
-});
-
-  // ===== ANTI PINDAH TAB =====
-document.addEventListener("visibilitychange", () => {
-  if(document.hidden){
-    setTimeout(()=>{
-      if(document.hidden){
-        alert("Keluar dari tab terdeteksi. Ujian dikirim!");
-        selesaiKuisAuto();
-      }
-    },1000);
-  }
-});
-
-
-// ====== BLOK KLIK KANAN ======
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-// ====== BLOK COPY ======
-document.addEventListener("copy", e => e.preventDefault());
-document.addEventListener("paste", e => e.preventDefault());
-
-document.addEventListener("keydown", function(e){
-  if(e.key === "F12") e.preventDefault();
-  if(e.ctrlKey && e.key === "u") e.preventDefault();
-  if(e.ctrlKey && e.key === "c") e.preventDefault();
-});
-
-  // kunci ESC
-document.addEventListener("keydown", function(e){
-
-  // jika ESC ditekan saat ujian
-  if(e.key === "Escape"){
-    if(ujianAktif){
-      e.preventDefault();
-
-      setTimeout(()=>{
-        if(!document.fullscreenElement){
-          document.documentElement.requestFullscreen();
-        }
-      }, 10);
-    }
-  }
-
-});
-function keluarFullscreen(){
-  if(document.fullscreenElement){
-    document.exitFullscreen();
-  }
+/* ===== KUNCI ===== */
+document.addEventListener("fullscreenchange",()=>{
+if(ujianAktif && !document.fullscreenElement){
+setTimeout(()=>document.documentElement.requestFullscreen(),100);
 }
+});
 
+document.addEventListener("visibilitychange",()=>{
+if(ujianAktif && document.hidden){
+pelanggaran++;
+if(pelanggaran>=1) selesaiKuisAuto();
+}
+});
 </script>
-
 </body>
 </html>
-
-
-
-
-
+```

@@ -163,7 +163,6 @@ button:hover{
 background:#ef4444 !important;
 color:white !important;
 }
-
   
 </style>
 </head>
@@ -471,9 +470,39 @@ Jawaban benar: <b style="color:green">${benar}</b>
 
 document.getElementById("halamanHasil").innerHTML += h;
 }
-  
+
+  // ====== KUNCI FULLSCREEN ======
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement) {
+    alert("Tidak boleh keluar dari layar ujian!");
+    document.documentElement.requestFullscreen();
+  }
+});
+// ====== BLOK PINDAH TAB ======
+let keluarTab = 0;
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    keluarTab++;
+    alert("Jangan pindah tab!");
+
+    if (keluarTab >= 3) {
+      alert("Terlalu sering pindah tab. Ujian dikirim!");
+      selesaiKuisAuto();
+    }
+  }
+});
+
+// ====== BLOK KLIK KANAN ======
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// ====== BLOK COPY ======
+document.addEventListener("copy", e => e.preventDefault());
+document.addEventListener("paste", e => e.preventDefault());
+
 </script>
 
 </body>
 </html>
+
 

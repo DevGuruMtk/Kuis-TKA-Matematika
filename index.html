@@ -486,10 +486,17 @@ document.getElementById("halamanHasil").innerHTML += h;
 
   // ====== KUNCI FULLSCREEN ======
 document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
-    alert("Tidak boleh keluar dari layar ujian!");
-    document.documentElement.requestFullscreen();
+
+  if(ujianAktif && !document.fullscreenElement){
+
+    alert("Tidak boleh keluar fullscreen!");
+
+    setTimeout(()=>{
+      document.documentElement.requestFullscreen();
+    }, 100);
+
   }
+
 });
 
   // ===== ANTI PINDAH TAB =====
@@ -518,10 +525,29 @@ document.addEventListener("keydown", function(e){
   if(e.ctrlKey && e.key === "c") e.preventDefault();
 });
 
+  // kunci ESC
+document.addEventListener("keydown", function(e){
+
+  // jika ESC ditekan saat ujian
+  if(e.key === "Escape"){
+    if(ujianAktif){
+      e.preventDefault();
+
+      setTimeout(()=>{
+        if(!document.fullscreenElement){
+          document.documentElement.requestFullscreen();
+        }
+      }, 10);
+    }
+  }
+
+});
+
 </script>
 
 </body>
 </html>
+
 
 
 

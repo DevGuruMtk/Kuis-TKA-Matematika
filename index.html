@@ -224,6 +224,8 @@ Absen:<br>
 <div id="halamanHasil"></div>
 
 <script>
+let ujianAktif = false;
+
   window.onbeforeunload = function() {
   return "Jawaban belum dikirim!";
 };
@@ -249,6 +251,7 @@ let waktu=600;
 let intervalTimer;
 
 function mulai(){
+  ujianAktif = true;
 
 let sekolahVal = document.getElementById("sekolah").value;
 let namaVal = document.getElementById("nama").value;
@@ -337,6 +340,7 @@ if(index < soal.length-1){
   tampilSoal();
 }else{
   selesaiKuis();
+
 }
 }
 
@@ -367,6 +371,7 @@ return m+":"+(s<10?"0"+s:s);
 }
 
 function selesaiKuis(){
+  ujianAktif = false;
 
 // cek apakah masih ada yang belum dijawab
 let belum = jawaban.filter(j => j === undefined).length;
@@ -423,9 +428,18 @@ tanggal: new Date().toLocaleString()
 });
 
 } // ← INI YANG KURANG (penutup selesaiKuis)
+document.getElementById("halamanHasil").innerHTML = `
+<h2>Hasil</h2>
+
+<h3>Skor: ${nilai}/${soal.length}</h3>
+
+<button onclick="lihatPembahasan()">Lihat Pembahasan</button>
+<button onclick="keluarFullscreen()">Keluar</button>
+<button onclick="location.reload()">Ulang</button>
+`;
 
   function selesaiKuisAuto(){
-
+    ujianAktif = false;
 clearInterval(intervalTimer);
 
 document.getElementById("kuis").style.display="none";
@@ -488,13 +502,10 @@ document.getElementById("halamanHasil").innerHTML += h;
 document.addEventListener("fullscreenchange", () => {
 
   if(ujianAktif && !document.fullscreenElement){
-
     alert("Tidak boleh keluar fullscreen!");
-
     setTimeout(()=>{
       document.documentElement.requestFullscreen();
     }, 100);
-
   }
 
 });
@@ -542,11 +553,17 @@ document.addEventListener("keydown", function(e){
   }
 
 });
+function keluarFullscreen(){
+  if(document.fullscreenElement){
+    document.exitFullscreen();
+  }
+}
 
 </script>
 
 </body>
 </html>
+
 
 
 

@@ -262,6 +262,19 @@ function selesaiKuis(){
 ujianAktif=false;
 clearInterval(timerInt);
 tampilkanHasil();
+  fetch(URL,{
+  method:"POST",
+  body:JSON.stringify({
+    sekolah: sekolah.value,
+    nama: nama.value,
+    kelas: kelas.value,
+    absen: absen.value,
+    skor: skor,
+    tanggal: new Date().toLocaleString(),
+    jawaban: jawaban.join("|")
+  })
+});
+
 }
 
 function selesaiKuisAuto(){
@@ -316,6 +329,7 @@ document.addEventListener("keydown",function(e){
 </body>
 </html>
 ```
+
 
 
 

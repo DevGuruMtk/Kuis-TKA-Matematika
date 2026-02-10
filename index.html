@@ -170,12 +170,16 @@ async function ambilSoal(){
   let res = await fetch(URL);
   let data = await res.json();
 
-  // ubah format spreadsheet → format CBT
   soal = data.map(r => ({
     t: r.soal,
     p: [r.A, r.B, r.C, r.D],
     j: Number(r.kunci)
   }));
+
+  if(soal.length===0){
+    alert("Soal tidak ditemukan di spreadsheet");
+    location.reload();
+  }
 }
 
 async function mulai(){
@@ -246,24 +250,39 @@ tampilSoal();
 
 function lompat(n){index=n;tampilSoal();}
 
+function formatWaktu(d){
+let m=Math.floor(d/60);
+let s=d%60;
+return m+":"+(s<10?"0"+s:s);
+}
+
 function startTimer(){
-timer.innerText = waktu;
+timer.innerText = formatWaktu(waktu);
 
 timerInt=setInterval(()=>{
 waktu--;
-timer.innerText=waktu;
+timer.innerText=formatWaktu(waktu);
 
 if(waktu<=0) selesaiKuisAuto();
 },1000);
 }
 
-
-function selesaiKuis(){
+async function selesaiKuis(){
 ujianAktif=false;
 clearInterval(timerInt);
-tampilkanHasil();
-  fetch(URL,{
+
+// hitung skor
+let skor=0;
+for(let i=0;i<soal.length;i++){
+  if(jawaban[i]==soal[i].j) skor++;
+}
+
+try{
+  await fetch(URL,{
   method:"POST",
+  headers:{
+    "Content-Type":"application/json"
+  },
   body:JSON.stringify({
     sekolah: sekolah.value,
     nama: nama.value,
@@ -275,23 +294,51 @@ tampilkanHasil();
   })
 });
 
+}catch(e){
+console.log("Gagal kirim:",e);
+alert("Data gagal dikirim. Periksa internet.");
 }
 
-function selesaiKuisAuto(){
+tampilkanHasil(skor);
+}
+
+async function selesaiKuisAuto(){
 ujianAktif=false;
 clearInterval(timerInt);
-alert("Ujian dikirim otomatis");
-tampilkanHasil();
-}
-
-function tampilkanHasil(){
-kuis.style.display="none";
-halamanHasil.style.display="block";
 
 let skor=0;
 for(let i=0;i<soal.length;i++){
-if(jawaban[i]==soal[i].j) skor++;
+  if(jawaban[i]==soal[i].j) skor++;
 }
+
+try{
+await fetch(URL,{
+  method:"POST",
+  headers:{
+    "Content-Type":"application/json"
+  },
+  body:JSON.stringify({
+    sekolah: sekolah.value,
+    nama: nama.value,
+    kelas: kelas.value,
+    absen: absen.value,
+    skor: skor,
+    tanggal: new Date().toLocaleString(),
+    jawaban: jawaban.join("|")
+  })
+});
+
+}catch(e){
+console.log("Gagal kirim:",e);
+}
+
+alert("Ujian dikirim otomatis");
+tampilkanHasil(skor);
+}
+
+function tampilkanHasil(skor){
+kuis.style.display="none";
+halamanHasil.style.display="block";
 
 halamanHasil.innerHTML=`
 <h2>Skor ${skor}/${soal.length}</h2>
@@ -299,7 +346,7 @@ halamanHasil.innerHTML=`
 `;
 }
 
-function keluar(){
+  function keluar(){
 if(document.fullscreenElement) document.exitFullscreen();
 location.reload();
 }
@@ -329,8 +376,4 @@ document.addEventListener("keydown",function(e){
 </body>
 </html>
 ```
-
-
-
-
 

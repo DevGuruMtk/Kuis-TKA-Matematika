@@ -168,7 +168,14 @@ let timerInt;
 
 async function ambilSoal(){
   let res = await fetch(URL);
-  soal = await res.json();
+  let data = await res.json();
+
+  // ubah format spreadsheet → format CBT
+  soal = data.map(r => ({
+    t: r.soal,
+    p: [r.A, r.B, r.C, r.D],
+    j: Number(r.kunci)
+  }));
 }
 
 async function mulai(){
@@ -297,4 +304,5 @@ if(pelanggaran>=1) selesaiKuisAuto();
 </body>
 </html>
 ```
+
 

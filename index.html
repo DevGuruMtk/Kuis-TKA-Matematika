@@ -155,7 +155,7 @@ Waktu: <span id="timer"></span>
 <div id="halamanHasil"></div>
 
 <script>
-const URL="https://script.google.com/macros/s/AKfycbxbmqFl9vdsJ5vcMoNN2fg-QBG7Zo_8TnH0gfLv3GEJ_NEDtXnJRg8b6TYUShpN5jiY/exec";
+const URL="https://script.google.com/macros/s/AKfycbxxKmNKSCCOT0LR4GhKBnmjjTtmZW6pz_-kydNBfdZBGf6HBKuAADa9tiwAQS7xq66P/exec";
 
 let soal=[];
 let ujianAktif=false;
@@ -247,12 +247,16 @@ tampilSoal();
 function lompat(n){index=n;tampilSoal();}
 
 function startTimer(){
+timer.innerText = waktu;
+
 timerInt=setInterval(()=>{
 waktu--;
 timer.innerText=waktu;
+
 if(waktu<=0) selesaiKuisAuto();
 },1000);
 }
+
 
 function selesaiKuis(){
 ujianAktif=false;
@@ -300,9 +304,18 @@ pelanggaran++;
 if(pelanggaran>=1) selesaiKuisAuto();
 }
 });
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape" && ujianAktif){
+    setTimeout(()=>{
+      document.documentElement.requestFullscreen();
+    },200);
+  }
+});
+
 </script>
 </body>
 </html>
 ```
+
 
 
